@@ -19,8 +19,8 @@
             ],
             "xpl_command" : "xPL_send_msg"
         },
-        "change_led" : {
-            "name" : "Change led color",
+        "wakeup" : {
+            "name" : "Wake up",
             "return_confirmation" : true,
             "parameters" : [{
                     "key" : "color",
@@ -28,7 +28,18 @@
                     "conversion" : ""
                 }
             ],
-            "xpl_command" : "xPL_curl"
+            "xpl_command" : "xPL_wakeup"
+        },
+        "sleep" : {
+            "name" : "Slepp",
+            "return_confirmation" : true,
+            "parameters" : [{
+                    "key" : "color",
+                    "data_type" : "DT_String",
+                    "conversion" : ""
+                }
+            ],
+            "xpl_command" : "xPL_sleep"
         }
     },
     "xpl_commands" : {
@@ -40,10 +51,20 @@
                 "static" : [],
                 "device" : []
             }
-        },        "xPL_curl" : {
-            "name" : "Get a page via curl",
+        },
+        "xPL_wakeup" : {
+            "name" : "wakeup via curl",
             "schema" : "sendmsg.basic",
-            "xplstat_name" : "xPL_ack-msg",
+            "xplstat_name" : "xPL_ack-wake",
+            "parameters" : {
+                "static" : [],
+                "device" : []
+            }
+        },
+        "xPL_sleep" : {
+            "name" : "Sleep via curl",
+            "schema" : "sendmsg.basic",
+            "xplstat_name" : "xPL_ack-sleep",
             "parameters" : {
                 "static" : [],
                 "device" : []
@@ -105,7 +126,7 @@
             "description" : "Send message to nabaztag.",
             "id" : "nabaztag",
             "name" : "nabaztag tts service",
-            "commands" : ["send_msg"],
+            "commands" : ["send_msg","wakeup","sleep"],
             "sensors" : ["msg_status", "error_send"],
             "parameters" : [{
                     "key" : "to",
