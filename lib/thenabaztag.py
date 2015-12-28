@@ -101,7 +101,7 @@ class Nabaztag(BaseClientService):
         else:
             return {'status': 'TTS sended', 'error': ''}
 
-    def sleep(self, body):
+    def sleep(self):
         print("sleep : entrée")
         data = urllib.urlencode({'action': "7"})
         url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&voice=" + self.voice + "&" + data
@@ -143,7 +143,7 @@ class Nabaztag(BaseClientService):
         else:
             return {'status': 'TTS sended', 'error': ''}
 
-    def wakeup(self, body):
+    def wakeup(self):
         print("wakeup : entrée")
         data = urllib.urlencode({'action': "13"})
         url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&voice=" + self.voice + "&" + data
