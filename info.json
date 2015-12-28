@@ -1,0 +1,165 @@
+{
+    "products" : [{
+            "name" : "Nabaztag",
+            "id" : "Nabaztag_client",
+            "documentation" : "",
+            "type" : "nabaztag"
+        }
+    ],
+    "configuration" : [{
+            "default": "Domogik notification",
+            "description": "Define header of all messages.",
+            "key": "msg_header",
+            "name": "Message header",
+            "required": "no",
+            "type": "string"
+        },{
+            "default": false,
+            "description": "Send a notification message to all notify clients at starting plugin.",
+            "key": "send_at_start",
+            "name": "send message at start up",
+            "required": "no",
+            "type": "boolean"
+        }],
+    "commands" : {
+        "send_msg" : {
+            "name" : "Send a message",
+            "return_confirmation" : true,
+            "parameters" : [{
+                    "key" : "body",
+                    "data_type" : "DT_String",
+                    "conversion" : ""
+                }
+            ],
+            "xpl_command" : "xPL_send_msg"
+        },
+        "change_led" : {
+            "name" : "Change led color",
+            "return_confirmation" : true,
+            "parameters" : [{
+                    "key" : "color",
+                    "data_type" : "DT_String",
+                    "conversion" : ""
+                }
+            ],
+            "xpl_command" : "xPL_curl"
+        }
+    },
+    "xpl_commands" : {
+        "xPL_send_msg" : {
+            "name" : "Send a message",
+            "schema" : "sendmsg.basic",
+            "xplstat_name" : "xPL_ack-msg",
+            "parameters" : {
+                "static" : [],
+                "device" : []
+            }
+        },        "xPL_curl" : {
+            "name" : "Send a message",
+            "schema" : "sendmsg.basic",
+            "xplstat_name" : "xPL_ack-msg",
+            "parameters" : {
+                "static" : [],
+                "device" : []
+            }
+        }
+    },
+    "sensors" : {
+        "msg_status" : {
+            "name" : "Message status send ",
+            "incremental": false,
+            "data_type" : "DT_String",
+            "conversion" : "",
+            "timeout": 0,
+            "history": {
+                    "store": true,
+                    "duplicate": false,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+        },
+        "error_send" : {
+            "name" : "Message error send",
+            "incremental": false,
+            "data_type" : "DT_String",
+            "conversion" : "",
+            "timeout": 0,
+            "history": {
+                    "store": true,
+                    "duplicate": false,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+        }
+    },
+    "xpl_stats" : {
+        "xPL_ack-msg" : {
+            "name" : "Message confirmation",
+            "schema" : "sendmsg.confirm",
+            "parameters" : {
+                "static" : [	],
+                "device" : [],
+                "dynamic" : [{
+                        "key" : "status",
+                        "ignore_values" : "",
+                        "sensor" : "msg_status"
+                    },{
+                        "key" : "error",
+                        "ignore_values" : "",
+                        "sensor" : "error_send"
+                    }
+                ]
+            }
+        }
+    },
+    "device_types" : {
+	"notify.nabaztag" : {
+            "description" : "Send message to nabaztag.",
+            "id" : "notify.nabaztag",
+            "name" : "nabaztag tts service",
+            "commands" : ["send_msg"],
+            "sensors" : ["msg_status", "error_send"],
+            "parameters" : [{
+                    "key" : "to",
+					"xpl": true,
+                    "description" : "Source title set in Karotz config.",
+                    "type" : "string"
+                },{
+                    "key" : "address",
+					"xpl": false,
+                    "description" : "Address of your openjabnab serveur",
+                    "type" : "string"
+                },{
+                    "key" : "voice",
+					"xpl": false,
+                    "description" : "Voice list of nabaztag.",
+                    "type" : "string"
+                },{
+                    "key" : "mac",
+					"xpl": false,
+                    "description" : "Mac address of the nabaztag.",
+                    "type" : "string"
+                },{
+                    "key" : "violet_token",
+					"xpl": false,
+                    "description" : "Violet API token.",
+                    "type" : "string"
+                }
+            ]
+        }
+    },
+    "identity" : {
+        "author" : "Tikismoke",
+        "author_email" : "new.domodroid at gmail.com",
+        "tags" : ["Nabaztag", "notification"],
+        "dependencies" : [],
+        "description" : "Interact with Nabaztag based on violet API",
+        "domogik_min_version" : "0.4.0",
+        "name" : "nabaztag",
+         "type" : "plugin",
+        "version" : "0.0.1"
+    },
+    "json_version" : 2
+}

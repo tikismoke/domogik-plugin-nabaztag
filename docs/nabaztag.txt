@@ -1,0 +1,99 @@
+====================
+Plugin documentation
+====================
+
+.. |icon| image:: icon.png
+    :width: 64px
+
+|icon|
+
+Last change
+===========
+New instructions to apply changes from immediatly previous version.
+
+- 0.2a0 : (18-06-2014) First published version for domogik 0.4
+    - Target :
+    - Change log :
+        - Update doc
+
+- `Previous change <changelog.html>`_
+
+Purpose
+=======
+This Domogik plugin send notification message through services that could SMS (from web), `Newtifry for Android <http://www.networkupstools.org/>`_.
+
+Create a socket connection with NUT to get UPS informations and format them to xPL format according to `xPL_project <http://xplproject.org.uk/wiki/index.php/Schema_-_SENDMSG.BASIC>`_ specifications.
+
+Sensors values for ack sended notification send to domogik device.
+
+Offer a simply class developpement to add service.
+ 
+Plugin configuration
+====================
+Configuration
+-------------
+In Domogik administration section, go to client plugin-notify details page.
+
++----------------+----------------------+-------------------------------------------------------------------------------+
+|Key             | Default value        | Description                                                                   |
++================+======================+===============================================================================+
+| startup-plugin | false                | Automatically start plugin at Domogik startup                                 |
++----------------+----------------------+-------------------------------------------------------------------------------+
+| msg_header     | Domogik notification | Define header of all messages.                                                |
++----------------+----------------------+-------------------------------------------------------------------------------+
+| send_at_start  | false                | Send a notification message to all notify clients at starting plugin          |
++----------------+----------------------+-------------------------------------------------------------------------------+
+
+
+Creating devices for SMS Client
+-------------------------------
+In clients page of admin UI, go to **plugin-notify-<your_host_domogik>**, select tab **"Devices"**, **"New"** to create your devices.
+
+Chose one way creation by product or device type.
+
+device_types : notify.smsweb
+*******************************
+
++-------------------+-------------------+------------------------------------------------------------------------------+
+| Key               | Example           | Description                                                                  |
++===================+===================+==============================================================================+
+| Device            | My phone id       | The display name for this device.                                            |
++-------------------+-------------------+------------------------------------------------------------------------------+
+| Description       | What you want     | A short descriptionn for this device.                                        |
++-------------------+-------------------+------------------------------------------------------------------------------+
+| Global to         | My Phone number   | Phone number to send SMS.                                                    |
++-------------------+-------------------+------------------------------------------------------------------------------+
+| Global operator   | Freemobile service| Choice :                                                                     |
+|                   |                   |   - Bouygues service                                                         |
+|                   |                   |   - Freemobile service.                                                      |
+|                   |                   |   - Orange service.                                                          |
+|                   |                   |   - SFR service.                                                             |
++-------------------+-------------------+------------------------------------------------------------------------------+
+| Global login      | My user login     | User login service.                                                          |
++-------------------+-------------------+------------------------------------------------------------------------------+
+| Global pwd        | My password       | User password service.                                                       |
++-------------------+-------------------+------------------------------------------------------------------------------+
+
+Instance-type : notify.newtifry
+*********************************
+
+Configure your `Newtifry acces <https://newtifry.appspot.com/page/api>`_ 
+
++--------------------+-------------------+-----------------------------------------------------------------------------+
+| Key                | Example           | Description                                                                 |
++====================+===================+=============================================================================+
+| Device             | My phone id       | The display name for this device.                                           |
++--------------------+-------------------+-----------------------------------------------------------------------------+
+| Description        | What you want     | A short descriptionn for this device.                                       |
++--------------------+-------------------+-----------------------------------------------------------------------------+
+| Global to          | My Newtifry title | Source title set in Newtify config.                                         |
++--------------------+-------------------+-----------------------------------------------------------------------------+
+| Global backend     | backend service   | BACKEND of newtifry server.                                                 |
+|                    |                   | Set default value : https://newtifry.appspot.com/newtifry                   |
+|                    |                   | Otherwise give your own server adress.                                      |
++--------------------+-------------------+-----------------------------------------------------------------------------+
+| Global sourcekey   | My source key     | 32bits source key generate by Newtify..                                     |
++--------------------+-------------------+-----------------------------------------------------------------------------+
+| Global defaulttitle| My title          | Default title, if not set by xPL message.                                   |
++--------------------+-------------------+-----------------------------------------------------------------------------+
+
