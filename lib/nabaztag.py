@@ -38,7 +38,7 @@ Implements
 
 import urllib,urllib2
 import json
-#from domogik_packages.plugin_notify.lib.client_devices import BaseClientService
+#from domogik_packages.plugin_nabaztag.lib.client_devices import BaseClientService
 from client_devices import BaseClientService
 
 class Nabaztag(BaseClientService):

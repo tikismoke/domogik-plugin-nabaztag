@@ -30,7 +30,7 @@ This is an upgrade based on sms plugin for domogik 0.3
 Implements
 ========
 
-- class NotifyClient to handle SMS
+- class Nabaztag
 
 @author: Nico <nico84dev@gmail.com>
 @copyright: (C) 2007-2014 Domogik project
@@ -43,26 +43,26 @@ import json
 import threading
 import time
 import sys
-from domogik_packages.plugin_notify.lib.client_devices import createDevice, OPERATORS_SERVICE
+from domogik_packages.plugin_nabaztag.lib.client_devices import createDevice, OPERATORS_SERVICE
     
-class NotifyClientException(Exception):
+class NabaztagClientException(Exception):
     """
-    NotifyClient exception
+    NabaztagyClient exception
     """
     def __init__(self, value):
         Exception.__init__(self)
-        self.value = "NotifyClient exception, " + value
+        self.value = "NabaztagClient exception, " + value
 
     def __str__(self):
         return repr(self.value)
 
 def getClientId(device):
-    """Return key Notify client id."""
+    """Return key Nabaztag client id."""
     if device.has_key('name') and device.has_key('id'):
         return "{0}_{1}".format(device['name'], + device['id'])
     else : return None
     
-class NotifyClient :
+class NabaztagClient :
     "Objet client de base pour la liaison operateur de Notification."
 
     def __init__ (self,  manager,  params, log) :

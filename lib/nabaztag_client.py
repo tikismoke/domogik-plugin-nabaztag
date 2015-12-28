@@ -30,7 +30,7 @@ This is an upgrade based on sms plugin for domogik 0.3
 Implements
 ========
 
-- class NotifyClient to handle SMS
+- class NabaztagClient to handle SMS
 
 @author: Nico <nico84dev@gmail.com>
 @copyright: (C) 2007-2014 Domogik project
