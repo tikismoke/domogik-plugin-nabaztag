@@ -85,7 +85,7 @@ class NabaztagClient :
         
     def close(self):
         """Send Xpl message and Close updater timers."""
-        self._log.info("Close SMS client {0}".format(self.name))
+        self._log.info("Close nabaztag client {0}".format(self.name))
         
     def updateDevice(self,  params):
         """Update device data."""
@@ -108,6 +108,10 @@ class NabaztagClient :
             if data['error'] == '' : del data['error']
             data['to'] = self.domogikDevice
             self._manager.sendXplAck(data)
-        else : 
-            self._log.debug(u"SMS Client {0}, recieved unknown command {1}".format(getClientId(self._device), xPLmessage))
+        if xPLmessage.has_key('to') and xPLmessage.has_key('wakeup') :
+            self._log.debug(u"NAbaztag Client {0}, recieved command wakeup {1}".format(getClientId(self._device), xPLmessage))
+        if xPLmessage.has_key('to') and xPLmessage.has_key('sleep') :
+            self._log.debug(u"NAbaztag Client {0}, recieved command sleep {1}".format(getClientId(self._device), xPLmessage))
+        else :
+            self._log.debug(u"Nabaztag Client {0}, recieved unknown command {1}".format(getClientId(self._device), xPLmessage))
             

@@ -26,7 +26,7 @@
       "return_confirmation": true,
       "parameters": [
         {
-          "key": "status",
+          "key": "wakeup",
           "data_type": "DT_Trigger",
           "conversion": "from_DT_Trigger_to_start"
         }
@@ -38,7 +38,7 @@
       "return_confirmation": true,
       "parameters": [
         {
-          "key": "status",
+          "key": "sleep",
           "data_type": "DT_Trigger",
           "conversion": "from_DT_Trigger_to_start"
         }
