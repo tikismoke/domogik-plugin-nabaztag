@@ -58,7 +58,7 @@
     },
     "xPL_wakeup": {
       "name": "wakeup via curl",
-      "schema": "exec.basic",
+      "schema": "sendmsg.basic",
       "xplstat_name": "xPL_ack-msg",
       "parameters": {
         "static": [],
@@ -67,7 +67,7 @@
     },
     "xPL_sleep": {
       "name": "Sleep via curl",
-      "schema": "exec.basic",
+      "schema": "sendmsg.basic",
       "xplstat_name": "xPL_ack-msg",
       "parameters": {
         "static": [],
@@ -145,13 +145,13 @@
         {
           "key": "to",
           "xpl": true,
-          "description": "Source title set in Karotz config.",
+          "description": "Source title set in Nabaztag config.",
           "type": "string"
         },
         {
           "key": "address",
           "xpl": false,
-          "description": "Address of your openjabnab serveur",
+          "description": "Address of your openjabnab server",
           "type": "string"
         },
         {
