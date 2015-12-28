@@ -197,12 +197,12 @@ class Nabaztag(BaseClientService):
         msg = message['header'] + ': ' if message['header'] else ''
         if 'title' in message:
             msg = msg + ' ** ' + message['title'] + ' ** '
-        if message['body']:
+        if "body" in message:
             msg = msg + message['body']
             result = self.send_msg(msg)
-        elif message['sleep']:
+        elif "wakeup" in message:
             result = self.wakeup
-        elif message['wakeup']:
+        elif "sleep" in  message:
             result = self.sleep
         else:
             result="error"
