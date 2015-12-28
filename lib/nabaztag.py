@@ -1,104 +1,145 @@
-# -*- coding: utf-8 -*-
+# !/usr/bin/python
+#-*- coding: utf-8 -*-
 
-""" This file is part of B{Domogik} project (U{http://www.domogik.org}).
+#import PyNUT
+import time
+from domogik_packages.plugin_nabaztag.lib.nabaztag_client import NabaztagClient, getClientId
+from domogik_packages.plugin_nabaztag.lib.client_devices import GetDeviceParams, OPERATORS_SERVICE
 
-License
-=======
-
-B{Domogik} is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-B{Domogik} is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Domogik. If not, see U{http://www.gnu.org/licenses}.
-
-Plugin purpose
-===========
-
-Send SMS on web service for french telephony providers : Orange, SFR, Bouygues, Freemobile.
-Send Notification message with newtifry service.
-Send Notification to karotz using tts.
-
-Implements
-========
-
-- Class Nabaztag
-
-@author: Nico <nico84dev@gmail.com>
-@copyright: (C) 2007-2014 Domogik project
-@license: GPL(v3)
-@organization: Domogik
-"""
-
-import urllib,urllib2
-import json
-#from domogik_packages.plugin_nabaztag.lib.client_devices import BaseClientService
-from client_devices import BaseClientService
-
-class Nabaztag(BaseClientService):
-    """ Notification Control nabaztag using tts
+class NabaztagClientsManagerException(Exception):
     """
-    def update(self,  params):
-        """ Create or update internal data, must be overwrited.
-            @param params :  domogik type.
-                type : dict
-            @param get_parameter : XplPlugin.get_parameter method.
-                type : methode (device, key)
-        """
-        self.to = params['to']
-        self.address = params['address'] if 'address' in params else None
-        self.violet_token = params['violet_token']
-	self.voice = params['voice']
-        self.mac = params['mac']            
- 
-    def send_msg(self, body):
-        print("send_msg : entrée")
-        data = urllib.urlencode({'tts' : "{0}".format(body)})
-	url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&voice=" + self.voice + "&" + data
-	request = url_sms
-        print "send_msg : \n" , request
-        try:
-            response = urllib2.urlopen(request)    # This request is sent in HTTP POST
-        except IOError, e:
-            print "failed : {0}".format(e)
-            codeResult = e.code
-            if codeResult == 400 : error = 'A mandatory parameter is missing'   #Un des paramètres obligatoires est manquant.
-            elif codeResult == 402 : error = 'Too many SMS were sent in too little time.'      # Trop de SMS ont été envoyés en trop peu de temps.
-            elif codeResult == 403 : error = 'The service is not enabled on the subscriber area, or login / incorrect key.'      # Le service n’est pas activé sur l’espace abonné, ou login / clé incorrect.
-            elif codeResult == 500 : error = 'Server side error. Please try again later.'      # Erreur côté serveur. Veuillez réessayez ultérieurement.
-            else : error = format(e)
-            return {'status': 'TTS not sended', 'error': error}
+    Nabaztag Manager exception
+    """
+    def __init__(self, value):
+        Exception.__init__(self)
+        self.value = "NabaztagClientsManager exception" + value
+
+    def __str__(self):
+        return repr(self.value)
+        
+class NabaztagClientsManager :
+    """
+    Manager Nabaztag Web Clients.
+    """
+    def __init__ (self, xplPlugin, cb_send_xPL) :
+        """Init manager Nabaztag Clients"""
+        self._xplPlugin = xplPlugin
+        self._cb_send_xPL = cb_send_xPL
+        self.clients = {} # list of all Nabaztag Clients
+        self._xplPlugin.log.info(u"Manager Nabaztag Clients is ready.")
+        
+    def _del__(self):
+        """Delete all Nabaztag CLients"""
+        print "try __del__ NabaztagClients"
+        for id in self.clients : self.clients[id] = None
+        
+    def stop(self):
+        """Close all Nabaztag CLients"""
+        self._xplPlugin.log.info(u"Closing NabaztagManager.")
+        for id in self.clients : self.clients[id].close()
+    
+    def addClient(self, instance):
+        """Add a Nabaztag from domogik instance"""
+        name = getClientId(instance)
+        if self.clients.has_key(name) :
+            self._xplPlugin.log.debug(u"Manager Client : Nabaztag Client {0} already exist, not added.".format(name))
+            return False
+        else:
+            params = GetDeviceParams(self._xplPlugin, instance)
+            if params :
+                if params['operator'] in OPERATORS_SERVICE :
+                    self.clients[name] = NabaztagClient(self,  params,  self._xplPlugin.log)
+                else :
+                    self._xplPlugin.log.error(u"Manager Client : Nabaztag Client type {0} not exist, not added.".format(name))
+                    return False                
+                self._xplPlugin.log.info(u"Manager Client : created new client {0}.".format(name))
+            else : 
+                self._xplPlugin.log.info(u"Manager Client : instance not configured can't add new client {0}.".format(name))
+                return False
+            return True
+        
+    def removeClient(self, name):
+        """Remove a Nabaztag client and close it"""
+        client = self.getClient(name)
+        if client :
+            client.close()
+            self.clients.pop(name)
+            
+    def getClient(self, id):
+        """Get Nabaztag client object by id."""
+        if self.clients.has_key(id) :
+            return self.clients[id]
+        else : 
+            return None
+            
+    def getIdsClient(self, idToCheck):
+        """Get Nabaztag client key ids."""
+        retval =[]
+        findId = ""
+        self._xplPlugin.log.debug (u"getIdsClient check for device : {0}".format(idToCheck))
+        if isinstance(idToCheck,  NabaztagClient) :
+            for id in self.clients.keys() :
+                if self.clients[id] == idToCheck :
+                    retval = [id]
+                    break
         else :
-            codeResult = response.getcode()
-            response.close()
-            if codeResult == 200 : error = ''     # Le SMS a été envoyé sur votre mobile.
-            elif codeResult == 400 : error = 'A mandatory parameter is missing'   #Un des paramètres obligatoires est manquant.
-            elif codeResult == 402 : error = 'Too many SMS were sent in too little time.'      # Trop de SMS ont été envoyés en trop peu de temps.
-            elif codeResult == 403 : error = 'The service is not enabled on the subscriber area, or login / incorrect key.'      # Le service n’est pas activé sur l’espace abonné, ou login / clé incorrect.
-            elif codeResult == 500 : error = 'Server side error. Please try again later.'      # Erreur côté serveur. Veuillez réessayez ultérieurement.
-            else : error = 'Unknown error.'
-        if error != '' :  return {'status': 'TTS not sended', 'error': error}
-        else : return {'status': 'TTS sended', 'error': ''}
+            self._xplPlugin.log.debug (u"getIdsClient, no NabaztagClient instance...")
+            if isinstance(idToCheck,  str) :  
+                findId = idToCheck
+                self._xplPlugin.log.debug (u"str instance...")
+            else :
+                if isinstance(idToCheck,  dict) :
+                    if idToCheck.has_key('to') : findId = idToCheck['to']
+                    else :
+                        if idToCheck.has_key('name') and idToCheck.has_key('id'): 
+                            findId = getClientId(idToCheck)
+            if self.clients.has_key(findId) : 
+                retval = [findId]
+                self._xplPlugin.log.debug (u"key id type find")
+            else :
+                self._xplPlugin.log.debug (u"No key id type, search {0} in devices {1}".format(findId, self.clients.keys()))
+                for id in self.clients.keys() :
+                    self._xplPlugin.log.debug(u"Search in list by device key : {0}".format(self.clients[id].domogikDevice))
+                    if self.clients[id].domogikDevice == findId : 
+                        self._xplPlugin.log.debug('find Nabaztag Client :)')
+                        retval.append(id)
+        self._xplPlugin.log.debug(u"getIdsClient result : {0}".format(retval))
+        return retval
+        
+    def refreshClientDevice(self,  client):
+        """Request a refresh domogik device data for a Nabaztag Client."""
+        cli = MQSyncReq(zmq.Context())
+        msg = MQMessage()
+        msg.set_action('device.get')
+        msg.add_data('type', 'plugin')
+        msg.add_data('name', self._xplPlugin.get_plugin_name())
+        msg.add_data('host', get_sanitized_hostname())
+        devices = cli.request('dbmgr', msg.get(), timeout=10).get()
+        for a_device in devices:
+            if a_device['device_type_id'] == client._device['device_type_id']  and a_device['id'] == client._device['id'] :
+                if a_device['name'] != client.device['name'] : # rename and change key client id
+                    old_id = getClientId(client._device)
+                    self.clients[getClientId(a_device)] = self.clients.pop(old_id)
+                    self._xplPlugin.log.info(u"Nabaztag Client {0} is rename {1}".format(old_id,  getClientId(a_device)))
+                client.updateDevice(a_device)
+                break
 
-    def send(self, message):
-        """ Send message
-            @param message : message dict data contain at least keys:
-                - 'to' : recipient of the message
-                - 'header' : header for message
-                - 'body" : message
-                - extra key defined in 'command' json declaration like 'title', priority', ....
-            @return : dict = {'status' : <Status info>, 'error' : <Error Message>}
-        """
-        msg = message['header'] + ': ' if message['header'] else ''
-        if 'title' in message : msg = msg + ' ** ' + message['title'] + ' ** '
-        msg = msg + message['body']
-        result = self.send_msg( msg)
-        print result
-        return result
+    def NabaztagClientsConnection(self):
+        """ Send a Notification connection Nabaztag to all Clients."""
+        for id in self.clients :
+            message = {'to': self.clients[id]._operator.to}
+            message['header'] = self._xplPlugin.get_config("msg_header")
+            message['title'] = 'Connexion'
+            message['body'] = u"Your Terminal is registered to receive notification :)"
+            data = self.clients[id]._operator.send(message)
+            if data['error'] == '' : del data['error']
+            data['to'] = self.clients[id].domogikDevice
+            self.sendXplAck(data)
 
+    def sendXplAck(self,  data):
+        """Send an ack xpl message"""
+        self._cb_send_xPL("sendmsg.confirm", data)
+
+    def sendXplTrig(self,  schema,  data):
+        """Send an xpl message"""
+        self._cb_send_xPL(schema,  data)

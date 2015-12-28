@@ -44,7 +44,7 @@ def createDevice(params, log = None):
         - Developer : add your python class derived from DeviceBase class."""
     newOperator = None
     if params['operator'] == 'Nabaztag' :
-        from domogik_packages.plugin_nabaztag.lib.nabaztag import Nabaztag
+        from domogik_packages.plugin_nabaztag.lib.thenabaztag import Nabaztag
         newOperator = Nabaztag(params,  log)
     return newOperator
 
