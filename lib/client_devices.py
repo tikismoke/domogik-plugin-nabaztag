@@ -116,3 +116,23 @@ class BaseClientService():
             @return : dict = {'status' : <Status info>, 'error' : <Error Message>}
         """
         return {'status': 'SMS not sended', 'error': 'Send function not defined.'}
+    def sleep(self):
+        """ Must be overwrited:
+            @param message : message dict data contain at least keys:
+                - 'to' : recipient of the message
+                - 'header' : header for message
+                - 'body" : message
+                - extra key defined in 'command' json declaration like 'title', priority', ....
+            @return : dict = {'status' : <Status info>, 'error' : <Error Message>}
+        """
+        return {'status': 'SMS not sended', 'error': 'Send function not defined.'}
+    def wakeup(self):
+        """ Must be overwrited:
+            @param message : message dict data contain at least keys:
+                - 'to' : recipient of the message
+                - 'header' : header for message
+                - 'body" : message
+                - extra key defined in 'command' json declaration like 'title', priority', ....
+            @return : dict = {'status' : <Status info>, 'error' : <Error Message>}
+        """
+        return {'status': 'SMS not sended', 'error': 'Send function not defined.'}
