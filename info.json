@@ -22,23 +22,13 @@
         "wakeup" : {
             "name" : "Wake up",
             "return_confirmation" : true,
-            "parameters" : [{
-                    "key" : "color",
-                    "data_type" : "DT_String",
-                    "conversion" : ""
-                }
-            ],
+            "parameters" : [],
             "xpl_command" : "xPL_wakeup"
         },
         "sleep" : {
-            "name" : "Slepp",
+            "name" : "Sleep",
             "return_confirmation" : true,
-            "parameters" : [{
-                    "key" : "color",
-                    "data_type" : "DT_String",
-                    "conversion" : ""
-                }
-            ],
+            "parameters" : [],
             "xpl_command" : "xPL_sleep"
         }
     },
@@ -55,7 +45,7 @@
         "xPL_wakeup" : {
             "name" : "wakeup via curl",
             "schema" : "sendmsg.basic",
-            "xplstat_name" : "xPL_ack-wake",
+            "xplstat_name" : "xPL_ack-msg",
             "parameters" : {
                 "static" : [],
                 "device" : []
@@ -64,7 +54,7 @@
         "xPL_sleep" : {
             "name" : "Sleep via curl",
             "schema" : "sendmsg.basic",
-            "xplstat_name" : "xPL_ack-sleep",
+            "xplstat_name" : "xPL_ack-msg",
             "parameters" : {
                 "static" : [],
                 "device" : []
