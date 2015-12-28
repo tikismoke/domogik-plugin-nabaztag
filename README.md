@@ -1,3 +1,6 @@
+NOT WORKING FOR NOW
+
+
 domogik-plugin-nabaztag
 =======================
 
