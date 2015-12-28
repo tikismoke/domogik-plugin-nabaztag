@@ -64,7 +64,7 @@ class Nabaztag(BaseClientService):
         data = urllib.urlencode({'tts': "{0}".format(body)})
         url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&voice=" + self.voice + "&" + data
         request = url_sms
-        print "send_msg : \n", request
+        print "http request : \n", request
         try:
             response = urllib2.urlopen(request)  # This request is sent in HTTP POST
         except IOError, e:
@@ -101,12 +101,12 @@ class Nabaztag(BaseClientService):
         else:
             return {'status': 'TTS sended', 'error': ''}
 
-    def sleep(self):
+    def sleep(self,sleep):
         print("sleep : entrée")
-        data = urllib.urlencode({'action': "7"})
-        url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&voice=" + self.voice + "&" + data
+        data = urllib.urlencode({'action': "14"})
+        url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&" + data
         request = url_sms
-        print "send_msg : \n", request
+        print "http request : \n", request
         try:
             response = urllib2.urlopen(request)  # This request is sent in HTTP POST
         except IOError, e:
@@ -143,12 +143,12 @@ class Nabaztag(BaseClientService):
         else:
             return {'status': 'TTS sended', 'error': ''}
 
-    def wakeup(self):
+    def wakeup(self,wakeup):
         print("wakeup : entrée")
         data = urllib.urlencode({'action': "13"})
-        url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&voice=" + self.voice + "&" + data
+        url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&" + data
         request = url_sms
-        print "send_msg : \n", request
+        print "http request : \n", request
         try:
             response = urllib2.urlopen(request)  # This request is sent in HTTP POST
         except IOError, e:
@@ -194,16 +194,22 @@ class Nabaztag(BaseClientService):
                 - extra key defined in 'command' json declaration like 'title', priority', ....
             @return : dict = {'status' : <Status info>, 'error' : <Error Message>}
         """
+        print "message : \n", message
         msg = message['header'] + ': ' if message['header'] else ''
+        print "msg : \n", msg
         if 'title' in message:
+    	    print "as a title : \n", message['title']
             msg = msg + ' ** ' + message['title'] + ' ** '
-        if "body" in message:
+        if 'body' in message:
+    	    print "as a body : \n", message['body']
             msg = msg + message['body']
             result = self.send_msg(msg)
-        elif "wakeup" in message:
-            result = self.wakeup
-        elif "sleep" in  message:
-            result = self.sleep
+        elif 'sleep' in message:
+    	    print "as a sleep : \n", message['sleep']
+            result = self.sleep(message['sleep'])
+        elif 'wakeup' in message:
+    	    print "as a wakeup : \n", message['wakeup']
+            result = self.wakeup(message['wakeup'])
         else:
             result="error"
         print result

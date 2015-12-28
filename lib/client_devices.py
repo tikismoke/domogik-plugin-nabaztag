@@ -116,7 +116,7 @@ class BaseClientService():
             @return : dict = {'status' : <Status info>, 'error' : <Error Message>}
         """
         return {'status': 'SMS not sended', 'error': 'Send function not defined.'}
-    def sleep(self):
+    def sleep(self, message):
         """ Must be overwrited:
             @param message : message dict data contain at least keys:
                 - 'to' : recipient of the message
@@ -126,7 +126,7 @@ class BaseClientService():
             @return : dict = {'status' : <Status info>, 'error' : <Error Message>}
         """
         return {'status': 'SMS not sended', 'error': 'Send function not defined.'}
-    def wakeup(self):
+    def wakeup(self, message):
         """ Must be overwrited:
             @param message : message dict data contain at least keys:
                 - 'to' : recipient of the message
