@@ -108,17 +108,25 @@ class NabaztagClient:
         '''Handle a xpl-cmnd message from hub.
         '''
         if xPLmessage.has_key('to') and xPLmessage.has_key('body'):
+            self._log.debug(u"NAbaztag Client, recieved command body {0}".format(xPLmessage))
             xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
             data = self._operator.send(xPLmessage)
             if data['error'] == '': del data['error']
             data['to'] = self.domogikDevice
             self._manager.sendXplAck(data)
         elif xPLmessage.has_key('to') and xPLmessage.has_key('wakeup'):
-            '''self._log.debug(u"NAbaztag Client {0}, recieved command wakeup {1}".format(getClientId(self._device), xPLmessage))'''
-            self._log.debug(u"NAbaztag Client, recieved command wakeup {0}".format( xPLmessage))
+            self._log.debug(u"NAbaztag Client, recieved command wakeup {0}".format(xPLmessage))
+            xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
+            data = self._operator.send(xPLmessage)
+            if data['error'] == '': del data['error']
+            data['to'] = self.domogikDevice
+            self._manager.sendXplAck(data)
         elif xPLmessage.has_key('to') and xPLmessage.has_key('sleep'):
-            self._log.debug(
-                u"NAbaztag Client {0}, recieved command sleep {1}".format(getClientId(self._device), xPLmessage))
+            self._log.debug(u"NAbaztag Client, recieved command sleep {0}".format(xPLmessage))
+            xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
+            data = self._operator.send(xPLmessage)
+            if data['error'] == '': del data['error']
+            data['to'] = self.domogikDevice
+            self._manager.sendXplAck(data)
         else:
-            self._log.debug(
-                u"Nabaztag Client {0}, recieved unknown command {1}".format(getClientId(self._device), xPLmessage))
+            self._log.debug(u"Nabaztag Client, recieved unknown command {0}".format(xPLmessage))

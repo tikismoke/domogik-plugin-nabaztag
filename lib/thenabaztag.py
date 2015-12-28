@@ -111,7 +111,8 @@ class Nabaztag(BaseClientService):
             @return : dict = {'status' : <Status info>, 'error' : <Error Message>}
         """
         msg = message['header'] + ': ' if message['header'] else ''
-        if 'title' in message: msg = msg + ' ** ' + message['title'] + ' ** '
+        if 'title' in message:
+            msg = msg + ' ** ' + message['title'] + ' ** '
         msg = msg + message['body']
         result = self.send_msg(msg)
         print result
