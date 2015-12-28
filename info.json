@@ -6,21 +6,7 @@
             "type" : "nabaztag"
         }
     ],
-    "configuration" : [{
-            "default": "Domogik notification",
-            "description": "Define header of all messages.",
-            "key": "msg_header",
-            "name": "Message header",
-            "required": "no",
-            "type": "string"
-        },{
-            "default": false,
-            "description": "Send a notification message to all notify clients at starting plugin.",
-            "key": "send_at_start",
-            "name": "send message at start up",
-            "required": "no",
-            "type": "boolean"
-        }],
+    "configuration" : [],
     "commands" : {
         "send_msg" : {
             "name" : "Send a message",
@@ -55,7 +41,7 @@
                 "device" : []
             }
         },        "xPL_curl" : {
-            "name" : "Send a message",
+            "name" : "Get a page via curl",
             "schema" : "sendmsg.basic",
             "xplstat_name" : "xPL_ack-msg",
             "parameters" : {
@@ -115,9 +101,9 @@
         }
     },
     "device_types" : {
-	"notify.nabaztag" : {
+	"nabaztag" : {
             "description" : "Send message to nabaztag.",
-            "id" : "notify.nabaztag",
+            "id" : "nabaztag",
             "name" : "nabaztag tts service",
             "commands" : ["send_msg"],
             "sensors" : ["msg_status", "error_send"],

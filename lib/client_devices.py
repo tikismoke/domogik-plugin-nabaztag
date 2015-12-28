@@ -37,7 +37,7 @@ Implements
 @license: GPL(v3)
 @organization: Domogik
 """
-OPERATORS_SERVICE =  ['SFR_sms-web', 'Orange_sms-web', 'Bouygues_sms-web', 'Freemobile_sms-web', 'Newtifry', 'Karotz', 'Nabaztag']
+OPERATORS_SERVICE =  ['Nabaztag']
                     
 def createDevice(params, log = None):
     """ Create a device depending of operator, use instance for get parameters.
