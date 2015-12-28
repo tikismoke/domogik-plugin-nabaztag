@@ -36,15 +36,17 @@ Implements
 @organization: Domogik
 """
 
-import urllib,urllib2
+import urllib, urllib2
 import json
-#from domogik_packages.plugin_nabaztag.lib.client_devices import BaseClientService
+# from domogik_packages.plugin_nabaztag.lib.client_devices import BaseClientService
 from client_devices import BaseClientService
+
 
 class Nabaztag(BaseClientService):
     """ Notification Control nabaztag using tts
     """
-    def update(self,  params):
+
+    def update(self, params):
         """ Create or update internal data, must be overwrited.
             @param params :  domogik type.
                 type : dict
@@ -54,37 +56,50 @@ class Nabaztag(BaseClientService):
         self.to = params['to']
         self.address = params['address'] if 'address' in params else None
         self.violet_token = params['violet_token']
-	self.voice = params['voice']
-        self.mac = params['mac']            
- 
+        self.voice = params['voice']
+        self.mac = params['mac']
+
     def send_msg(self, body):
         print("send_msg : entrée")
-        data = urllib.urlencode({'tts' : "{0}".format(body)})
-	url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&voice=" + self.voice + "&" + data
-	request = url_sms
-        print "send_msg : \n" , request
+        data = urllib.urlencode({'tts': "{0}".format(body)})
+        url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&voice=" + self.voice + "&" + data
+        request = url_sms
+        print "send_msg : \n", request
         try:
-            response = urllib2.urlopen(request)    # This request is sent in HTTP POST
+            response = urllib2.urlopen(request)  # This request is sent in HTTP POST
         except IOError, e:
             print "failed : {0}".format(e)
             codeResult = e.code
-            if codeResult == 400 : error = 'A mandatory parameter is missing'   #Un des paramètres obligatoires est manquant.
-            elif codeResult == 402 : error = 'Too many SMS were sent in too little time.'      # Trop de SMS ont été envoyés en trop peu de temps.
-            elif codeResult == 403 : error = 'The service is not enabled on the subscriber area, or login / incorrect key.'      # Le service n’est pas activé sur l’espace abonné, ou login / clé incorrect.
-            elif codeResult == 500 : error = 'Server side error. Please try again later.'      # Erreur côté serveur. Veuillez réessayez ultérieurement.
-            else : error = format(e)
+            if codeResult == 400:
+                error = 'A mandatory parameter is missing'  # Un des paramètres obligatoires est manquant.
+            elif codeResult == 402:
+                error = 'Too many SMS were sent in too little time.'  # Trop de SMS ont été envoyés en trop peu de temps.
+            elif codeResult == 403:
+                error = 'The service is not enabled on the subscriber area, or login / incorrect key.'  # Le service n’est pas activé sur l’espace abonné, ou login / clé incorrect.
+            elif codeResult == 500:
+                error = 'Server side error. Please try again later.'  # Erreur côté serveur. Veuillez réessayez ultérieurement.
+            else:
+                error = format(e)
             return {'status': 'TTS not sended', 'error': error}
-        else :
+        else:
             codeResult = response.getcode()
             response.close()
-            if codeResult == 200 : error = ''     # Le SMS a été envoyé sur votre mobile.
-            elif codeResult == 400 : error = 'A mandatory parameter is missing'   #Un des paramètres obligatoires est manquant.
-            elif codeResult == 402 : error = 'Too many SMS were sent in too little time.'      # Trop de SMS ont été envoyés en trop peu de temps.
-            elif codeResult == 403 : error = 'The service is not enabled on the subscriber area, or login / incorrect key.'      # Le service n’est pas activé sur l’espace abonné, ou login / clé incorrect.
-            elif codeResult == 500 : error = 'Server side error. Please try again later.'      # Erreur côté serveur. Veuillez réessayez ultérieurement.
-            else : error = 'Unknown error.'
-        if error != '' :  return {'status': 'TTS not sended', 'error': error}
-        else : return {'status': 'TTS sended', 'error': ''}
+            if codeResult == 200:
+                error = ''  # Le SMS a été envoyé sur votre mobile.
+            elif codeResult == 400:
+                error = 'A mandatory parameter is missing'  # Un des paramètres obligatoires est manquant.
+            elif codeResult == 402:
+                error = 'Too many SMS were sent in too little time.'  # Trop de SMS ont été envoyés en trop peu de temps.
+            elif codeResult == 403:
+                error = 'The service is not enabled on the subscriber area, or login / incorrect key.'  # Le service n’est pas activé sur l’espace abonné, ou login / clé incorrect.
+            elif codeResult == 500:
+                error = 'Server side error. Please try again later.'  # Erreur côté serveur. Veuillez réessayez ultérieurement.
+            else:
+                error = 'Unknown error.'
+        if error != '':
+            return {'status': 'TTS not sended', 'error': error}
+        else:
+            return {'status': 'TTS sended', 'error': ''}
 
     def send(self, message):
         """ Send message
@@ -96,9 +111,8 @@ class Nabaztag(BaseClientService):
             @return : dict = {'status' : <Status info>, 'error' : <Error Message>}
         """
         msg = message['header'] + ': ' if message['header'] else ''
-        if 'title' in message : msg = msg + ' ** ' + message['title'] + ' ** '
+        if 'title' in message: msg = msg + ' ** ' + message['title'] + ' ** '
         msg = msg + message['body']
-        result = self.send_msg( msg)
+        result = self.send_msg(msg)
         print result
         return result
-

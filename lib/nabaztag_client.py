@@ -1,5 +1,5 @@
 # !/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 """ This file is part of B{Domogik} project (U{http://www.domogik.org}).
 
@@ -38,17 +38,18 @@ Implements
 @organization: Domogik
 """
 
-
 import json
 import threading
 import time
 import sys
 from domogik_packages.plugin_nabaztag.lib.client_devices import createDevice, OPERATORS_SERVICE
-    
+
+
 class NabaztagClientException(Exception):
     """
     NAbaztagClient exception
     """
+
     def __init__(self, value):
         Exception.__init__(self)
         self.value = "AnabaztagClient exception, " + value
@@ -56,16 +57,19 @@ class NabaztagClientException(Exception):
     def __str__(self):
         return repr(self.value)
 
+
 def getClientId(device):
     """Return key Nabaztag client id."""
     if device.has_key('name') and device.has_key('id'):
         return "{0}_{1}".format(device['name'], + device['id'])
-    else : return None
-    
-class NabaztagClient :
+    else:
+        return None
+
+
+class NabaztagClient:
     "Objet client de base pour la liaison operateur de Notification."
 
-    def __init__ (self,  manager,  params, log) :
+    def __init__(self, manager, params, log):
         "Initialise le client"
         self._manager = manager
         self.operator = params['operator']
@@ -75,19 +79,19 @@ class NabaztagClient :
         self._operator = createDevice(params, self._log)
 
     # On accède aux attributs uniquement depuis les property
-    smsId = property(lambda self: getClientId(self._device)) 
+    smsId = property(lambda self: getClientId(self._device))
     domogikDevice = property(lambda self: self._getDomogikDevice())
 
     def __del__(self):
         '''Send Xpl message and Close updater timers.'''
         print "Try __del__ client"
         self.close()
-        
+
     def close(self):
         """Send Xpl message and Close updater timers."""
         self._log.info("Close nabaztag client {0}".format(self.name))
-        
-    def updateDevice(self,  params):
+
+    def updateDevice(self, params):
         """Update device data."""
         self._operator.update(params)
         self.operator = params['operator']
@@ -95,23 +99,26 @@ class NabaztagClient :
 
     def _getDomogikDevice(self):
         """Return device Id for xPL domogik device"""
-        if self._operator :
+        if self._operator:
             return self._operator.to
-        else : return None
+        else:
+            return None
 
-    def handle_xpl_cmd(self,  xPLmessage):
+    def handle_xpl_cmd(self, xPLmessage):
         '''Handle a xpl-cmnd message from hub.
         '''
-        if xPLmessage.has_key('to') and xPLmessage.has_key('body') :
+        if xPLmessage.has_key('to') and xPLmessage.has_key('body'):
             xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
             data = self._operator.send(xPLmessage)
-            if data['error'] == '' : del data['error']
+            if data['error'] == '': del data['error']
             data['to'] = self.domogikDevice
             self._manager.sendXplAck(data)
-        if xPLmessage.has_key('to') and xPLmessage.has_key('wakeup') :
-            self._log.debug(u"NAbaztag Client {0}, recieved command wakeup {1}".format(getClientId(self._device), xPLmessage))
-        if xPLmessage.has_key('to') and xPLmessage.has_key('sleep') :
-            self._log.debug(u"NAbaztag Client {0}, recieved command sleep {1}".format(getClientId(self._device), xPLmessage))
-        else :
-            self._log.debug(u"Nabaztag Client {0}, recieved unknown command {1}".format(getClientId(self._device), xPLmessage))
-            
+        elif xPLmessage.has_key('to') and xPLmessage.has_key('wakeup'):
+            self._log.debug(
+                u"NAbaztag Client {0}, recieved command wakeup {1}".format(getClientId(self._device), xPLmessage))
+        elif xPLmessage.has_key('to') and xPLmessage.has_key('sleep'):
+            self._log.debug(
+                u"NAbaztag Client {0}, recieved command sleep {1}".format(getClientId(self._device), xPLmessage))
+        else:
+            self._log.debug(
+                u"Nabaztag Client {0}, recieved unknown command {1}".format(getClientId(self._device), xPLmessage))

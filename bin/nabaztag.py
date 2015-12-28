@@ -47,14 +47,16 @@ try:
     from domogik_packages.plugin_nabaztag.lib.nabaztag_client import getClientId
 
     import traceback
-except ImportError as exc :
+except ImportError as exc:
     import logging
-    logging.basicConfig(filename='/var/log/domogik/nabaztag_start_error.log',level=logging.DEBUG)
+
+    logging.basicConfig(filename='/var/log/domogik/nabaztag_start_error.log', level=logging.DEBUG)
     log = logging.getLogger('NabaztagManager_start_error')
-    err = "Error: Plugin Starting failed to import module ({})".format(exc) 
+    err = "Error: Plugin Starting failed to import module ({})".format(exc)
     print err
     logging.error(err)
     print log
+
 
 class NabaztagManager(XplPlugin):
     """ Envois et recois des codes xPL des notifications
@@ -69,25 +71,27 @@ class NabaztagManager(XplPlugin):
         if not self.check_configured():
             return
         # get the devices list
-        self.devices = self.get_device_list(quit_if_no_device = False)
+        self.devices = self.get_device_list(quit_if_no_device=False)
         # get the config values
         self.managerClients = NabaztagClientsManager(self, self.send_xplTrig)
-        for a_device in self.devices :
-            try :
-                if self.managerClients.addClient(a_device) :
+        for a_device in self.devices:
+            try:
+                if self.managerClients.addClient(a_device):
                     self.log.info("Ready to work with device {0}".format(getClientId(a_device)))
-                else : self.log.info("Device parameters not configured, can't create Nabaztag Client : {0}".format(getClientId(a_device)))
+                else:
+                    self.log.info("Device parameters not configured, can't create Nabaztag Client : {0}".format(
+                        getClientId(a_device)))
             except:
                 self.log.error(traceback.format_exc())
         # Create the xpl listeners
-        Listener(self.handle_xpl_cmd, self.myxpl,{'schema': 'sendmsg.basic',
-                                                                        'xpltype': 'xpl-cmnd'})
+        Listener(self.handle_xpl_cmd, self.myxpl, {'schema': 'sendmsg.basic',
+                                                   'xpltype': 'xpl-cmnd'})
         self.add_stop_cb(self.managerClients.stop)
         print "Plugin ready :)"
         self.log.info("Plugin ready :)")
-        if self.get_config("send_at_start") : self.managerClients.NabaztagClientsConnection()
+        if self.get_config("send_at_start"): self.managerClients.NabaztagClientsConnection()
         self.ready()
-        
+
     def __del__(self):
         """Close managerClients"""
         print "Try __del__ self.managerClients."
@@ -102,7 +106,7 @@ class NabaztagManager(XplPlugin):
         msg.add_data(data)
         self.myxpl.send(msg)
 
-    def send_xplTrig(self, schema,  data):
+    def send_xplTrig(self, schema, data):
         """ Send xPL message on network
         """
         self.log.debug("Xpl Trig for {0}".format(data))
@@ -111,7 +115,7 @@ class NabaztagManager(XplPlugin):
         msg.set_schema(schema)
         msg.add_data(data)
         self.myxpl.send(msg)
-        
+
     def send_xplCmd(self, data):
         """ Send xPL cmd message on network
         """
@@ -126,8 +130,8 @@ class NabaztagManager(XplPlugin):
     def handle_xpl_trig(self, message):
         self.log.debug("xpl-trig listener received message:{0}".format(message))
         print message
-    
-    def handle_xpl_cmd(self,  message):
+
+    def handle_xpl_cmd(self, message):
         """ Process xpl schema sendmsg.basic
         """
         self.log.debug("xpl-cmds listener received message:{0}".format(message))
@@ -135,15 +139,15 @@ class NabaztagManager(XplPlugin):
         self.log.debug("device :" + device_name)
         idsClient = self.managerClients.getIdsClient(device_name)
         find = False
-        if idsClient != [] :
-            for id in idsClient :       
+        if idsClient != []:
+            for id in idsClient:
                 client = self.managerClients.getClient(id)
-                if client :
+                if client:
                     self.log.debug("Handle xpl-cmds for Nabaztag client :{0}".format(message.data['to']))
                     find = True
                     client.handle_xpl_cmd(message.data)
-        if not find : self.log.debug("xpl-cmds received for unknowns Nabaztag client :{0}".format(message.data['to']))
-    
+        if not find: self.log.debug("xpl-cmds received for unknowns Nabaztag client :{0}".format(message.data['to']))
+
 
 if __name__ == "__main__":
     NabaztagManager()
