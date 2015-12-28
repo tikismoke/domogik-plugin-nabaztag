@@ -115,7 +115,7 @@ class NabaztagClient:
             self._manager.sendXplAck(data)
         elif xPLmessage.has_key('to') and xPLmessage.has_key('wakeup'):
             '''self._log.debug(u"NAbaztag Client {0}, recieved command wakeup {1}".format(getClientId(self._device), xPLmessage))'''
-            self._log.debug(u"NAbaztag Client {0}, recieved command wakeup {1}".format( xPLmessage))
+            self._log.debug(u"NAbaztag Client, recieved command wakeup {0}".format( xPLmessage))
         elif xPLmessage.has_key('to') and xPLmessage.has_key('sleep'):
             self._log.debug(
                 u"NAbaztag Client {0}, recieved command sleep {1}".format(getClientId(self._device), xPLmessage))
