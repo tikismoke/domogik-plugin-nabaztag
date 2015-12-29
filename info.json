@@ -51,7 +51,8 @@
       "parameters": [
         {
           "key": "posleft",
-          "data_type": "DT_Number"
+          "data_type": "DT_Number",
+          "conversion": ""
         }
       ],
       "xpl_command": "xPL_left_ear"
@@ -62,7 +63,8 @@
       "parameters": [
         {
           "key": "posright",
-          "data_type": "DT_Number"
+          "data_type": "DT_Number",
+          "conversion": ""
         }
       ],
       "xpl_command": "xPL_right_ear"
