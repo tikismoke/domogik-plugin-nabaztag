@@ -51,7 +51,7 @@
       "parameters": [
         {
           "key": "posleft",
-          "data_type": "DT_Number",
+          "data_type": "DT_String",
           "conversion": ""
         }
       ],
@@ -63,7 +63,7 @@
       "parameters": [
         {
           "key": "posright",
-          "data_type": "DT_Number",
+          "data_type": "DT_String",
           "conversion": ""
         }
       ],
@@ -90,7 +90,7 @@
       }
     },
     "xPL_sleep": {
-      "name": "Sleep via curl",
+      "name": "Sleep",
       "schema": "sendmsg.basic",
       "xplstat_name": "xPL_ack-msg",
       "parameters": {
@@ -193,6 +193,7 @@
           "type": "string"
         },
         {
+          "default": "openjabnab.fr",
           "key": "address",
           "xpl": false,
           "description": "Address of your openjabnab server",
