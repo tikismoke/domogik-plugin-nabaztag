@@ -101,10 +101,9 @@ class Nabaztag(BaseClientService):
         else:
             return {'status': 'TTS sended', 'error': ''}
 
-    def sleep(self,sleep):
-        print("sleep : entrée")
-        data = urllib.urlencode({'action': "14"})
-        url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&" + data
+    def action(self, actioncode):
+        print("action : entrée")
+        url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&action=" + actioncode
         request = url_sms
         print "http request : \n", request
         try:
@@ -122,7 +121,7 @@ class Nabaztag(BaseClientService):
                 error = 'Server side error. Please try again later.'  # Erreur côté serveur. Veuillez réessayez ultérieurement.
             else:
                 error = format(e)
-            return {'status': 'TTS not sended', 'error': error}
+            return {'status': 'Action error', 'error': error}
         else:
             codeResult = response.getcode()
             response.close()
@@ -139,51 +138,9 @@ class Nabaztag(BaseClientService):
             else:
                 error = 'Unknown error.'
         if error != '':
-            return {'status': 'TTS not sended', 'error': error}
+            return {'status': 'Action error', 'error': error}
         else:
-            return {'status': 'TTS sended', 'error': ''}
-
-    def wakeup(self,wakeup):
-        print("wakeup : entrée")
-        data = urllib.urlencode({'action': "13"})
-        url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&" + data
-        request = url_sms
-        print "http request : \n", request
-        try:
-            response = urllib2.urlopen(request)  # This request is sent in HTTP POST
-        except IOError, e:
-            print "failed : {0}".format(e)
-            codeResult = e.code
-            if codeResult == 400:
-                error = 'A mandatory parameter is missing'  # Un des paramètres obligatoires est manquant.
-            elif codeResult == 402:
-                error = 'Too many SMS were sent in too little time.'  # Trop de SMS ont été envoyés en trop peu de temps.
-            elif codeResult == 403:
-                error = 'The service is not enabled on the subscriber area, or login / incorrect key.'  # Le service n’est pas activé sur l’espace abonné, ou login / clé incorrect.
-            elif codeResult == 500:
-                error = 'Server side error. Please try again later.'  # Erreur côté serveur. Veuillez réessayez ultérieurement.
-            else:
-                error = format(e)
-            return {'status': 'TTS not sended', 'error': error}
-        else:
-            codeResult = response.getcode()
-            response.close()
-            if codeResult == 200:
-                error = ''  # Le SMS a été envoyé sur votre mobile.
-            elif codeResult == 400:
-                error = 'A mandatory parameter is missing'  # Un des paramètres obligatoires est manquant.
-            elif codeResult == 402:
-                error = 'Too many SMS were sent in too little time.'  # Trop de SMS ont été envoyés en trop peu de temps.
-            elif codeResult == 403:
-                error = 'The service is not enabled on the subscriber area, or login / incorrect key.'  # Le service n’est pas activé sur l’espace abonné, ou login / clé incorrect.
-            elif codeResult == 500:
-                error = 'Server side error. Please try again later.'  # Erreur côté serveur. Veuillez réessayez ultérieurement.
-            else:
-                error = 'Unknown error.'
-        if error != '':
-            return {'status': 'TTS not sended', 'error': error}
-        else:
-            return {'status': 'TTS sended', 'error': ''}
+            return {'status': 'Action done', 'error': ''}
 
     def send(self, message):
         """ Send message
@@ -194,23 +151,17 @@ class Nabaztag(BaseClientService):
                 - extra key defined in 'command' json declaration like 'title', priority', ....
             @return : dict = {'status' : <Status info>, 'error' : <Error Message>}
         """
-        print "message : \n", message
         msg = message['header'] + ': ' if message['header'] else ''
-        print "msg : \n", msg
         if 'title' in message:
-    	    print "as a title : \n", message['title']
             msg = msg + ' ** ' + message['title'] + ' ** '
         if 'body' in message:
-    	    print "as a body : \n", message['body']
             msg = msg + message['body']
             result = self.send_msg(msg)
         elif 'sleep' in message:
-    	    print "as a sleep : \n", message['sleep']
-            result = self.sleep(message['sleep'])
+            result = self.sleep("13")
         elif 'wakeup' in message:
-    	    print "as a wakeup : \n", message['wakeup']
-            result = self.wakeup(message['wakeup'])
+            result = self.wakeup("13")
         else:
-            result="error"
+            result = "error"
         print result
         return result
