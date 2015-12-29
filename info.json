@@ -51,7 +51,7 @@
       "parameters": [
         {
           "key": "posleft",
-          "data_type": "DT_String",
+          "data_type": "DT_Number",
           "conversion": ""
         }
       ],
@@ -63,7 +63,7 @@
       "parameters": [
         {
           "key": "posright",
-          "data_type": "DT_String",
+          "data_type": "DT_Number",
           "conversion": ""
         }
       ],
@@ -200,6 +200,7 @@
           "type": "string"
         },
         {
+          "default": "claire",
           "key": "voice",
           "xpl": false,
           "description": "Voice list of nabaztag.",

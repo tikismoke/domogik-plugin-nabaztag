@@ -115,7 +115,7 @@ class Nabaztag(BaseClientService):
         else:
             return {'status': 'Action done', 'error': ''}
 
-    def ear(self, position, ears):
+    def earpos(self, position, ears):
         print("ear : entrée")
         url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&pos" + ears + "=" + position
         result = self.request(url_sms)
@@ -133,6 +133,7 @@ class Nabaztag(BaseClientService):
                 - extra key defined in 'command' json declaration like 'title', priority', ....
             @return : dict = {'status' : <Status info>, 'error' : <Error Message>}
         """
+        print message
         msg = message['header'] + ': ' if message['header'] else ''
         if 'title' in message:
             msg = msg + ' ** ' + message['title'] + ' ** '

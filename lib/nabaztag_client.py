@@ -107,26 +107,41 @@ class NabaztagClient:
     def handle_xpl_cmd(self, xPLmessage):
         '''Handle a xpl-cmnd message from hub.
         '''
-        if xPLmessage.has_key('to') and xPLmessage.has_key('body'):
-            self._log.debug(u"NAbaztag Client, recieved command body {0}".format(xPLmessage))
-            xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
-            data = self._operator.send(xPLmessage)
-            if data['error'] == '': del data['error']
-            data['to'] = self.domogikDevice
-            self._manager.sendXplAck(data)
-        elif xPLmessage.has_key('to') and xPLmessage.has_key('wakeup'):
-            self._log.debug(u"NAbaztag Client, recieved command wakeup {0}".format(xPLmessage))
-            xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
-            data = self._operator.send(xPLmessage)
-            if data['error'] == '': del data['error']
-            data['to'] = self.domogikDevice
-            self._manager.sendXplAck(data)
-        elif xPLmessage.has_key('to') and xPLmessage.has_key('sleep'):
-            self._log.debug(u"NAbaztag Client, recieved command sleep {0}".format(xPLmessage))
-            xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
-            data = self._operator.send(xPLmessage)
-            if data['error'] == '': del data['error']
-            data['to'] = self.domogikDevice
-            self._manager.sendXplAck(data)
+        if xPLmessage.has_key('to'):
+                if xPLmessage.has_key('body'):
+                    self._log.debug(u"NAbaztag Client, recieved command body {0}".format(xPLmessage))
+                    xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
+                    data = self._operator.send(xPLmessage)
+                    if data['error'] == '': del data['error']
+                    data['to'] = self.domogikDevice
+                    self._manager.sendXplAck(data)
+                elif xPLmessage.has_key('wakeup'):
+                    self._log.debug(u"NAbaztag Client, recieved command wakeup {0}".format(xPLmessage))
+                    xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
+                    data = self._operator.send(xPLmessage)
+                    if data['error'] == '': del data['error']
+                    data['to'] = self.domogikDevice
+                    self._manager.sendXplAck(data)
+                elif xPLmessage.has_key('sleep'):
+                    self._log.debug(u"NAbaztag Client, recieved command sleep {0}".format(xPLmessage))
+                    xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
+                    data = self._operator.send(xPLmessage)
+                    if data['error'] == '': del data['error']
+                    data['to'] = self.domogikDevice
+                    self._manager.sendXplAck(data)
+                elif xPLmessage.has_key('posleft'):
+                    self._log.debug(u"NAbaztag Client, recieved command to move left ear {0}".format(xPLmessage))
+                    xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
+                    data = self._operator.send(xPLmessage)
+                    if data['error'] == '': del data['error']
+                    data['to'] = self.domogikDevice
+                    self._manager.sendXplAck(data)
+                elif xPLmessage.has_key('posright'):
+                    self._log.debug(u"NAbaztag Client, recieved command to move right ear {0}".format(xPLmessage))
+                    xPLmessage['header'] = self._manager._xplPlugin.get_config("msg_header")
+                    data = self._operator.send(xPLmessage)
+                    if data['error'] == '': del data['error']
+                    data['to'] = self.domogikDevice
+                    self._manager.sendXplAck(data)
         else:
             self._log.debug(u"Nabaztag Client, recieved unknown command {0}".format(xPLmessage))
