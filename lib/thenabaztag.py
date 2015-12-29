@@ -158,9 +158,9 @@ class Nabaztag(BaseClientService):
             msg = msg + message['body']
             result = self.send_msg(msg)
         elif 'sleep' in message:
-            result = self.sleep("13")
+            result = self.action("14")
         elif 'wakeup' in message:
-            result = self.wakeup("13")
+            result = self.action("13")
         else:
             result = "error"
         print result
