@@ -200,10 +200,10 @@
           "type": "string"
         },
         {
-          "default": "claire",
+          "default": "voice=claire",
           "key": "voice",
           "xpl": false,
-          "description": "Voice list of nabaztag.",
+          "description": "Voice list of nabaztag. Nabaztag voice. Can be voice=xx or ws_kajedo=xxxx or ws_acapela=xxxx",
           "type": "string"
         },
         {

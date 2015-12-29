@@ -9,7 +9,7 @@ import sys
 if __name__ == "__main__":
 
     # set up the plugin name
-    name = "notify"
+    name = "nabaztag"
 
     # load the test devices class
     td = TestDevice()

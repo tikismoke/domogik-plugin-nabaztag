@@ -1,6 +1,3 @@
-NOT WORKING FOR NOW
-
-
 domogik-plugin-nabaztag
 =======================
 
@@ -10,4 +7,4 @@ A domogik (www.domogik.org) plugin to interact with nabaztag:
 - Wakeup.
 - Move ears.
 - Send TTS.
-- Change led color.
+- Change led color. (not yet)

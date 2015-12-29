@@ -99,7 +99,7 @@ class Nabaztag(BaseClientService):
     def send_msg(self, body):
         print("send_msg : entrée")
         data = urllib.urlencode({'tts': "{0}".format(body)})
-        url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&voice=" + self.voice + "&" + data
+        url_sms = "http://" + self.address + "/ojn/FR/api.jsp?&sn=" + self.mac + "&token=" + self.violet_token + "&" + self.voice + "&" + data
         result = self.request(url_sms)
         if result['error'] != '':
             return {'status': 'SMS not sended', 'error': error}
