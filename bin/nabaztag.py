@@ -67,9 +67,6 @@ class NabaztagManager(XplPlugin):
         """
         XplPlugin.__init__(self, name='nabaztag')
 
-        # check if the plugin is configured. If not, this will stop the plugin and log an error
-        if not self.check_configured():
-            return
         # get the devices list
         self.devices = self.get_device_list(quit_if_no_device=False)
         # get the config values
@@ -89,7 +86,6 @@ class NabaztagManager(XplPlugin):
         self.add_stop_cb(self.managerClients.stop)
         print "Plugin ready :)"
         self.log.info("Plugin ready :)")
-        if self.get_config("send_at_start"): self.managerClients.NabaztagClientsConnection()
         self.ready()
 
     def __del__(self):
@@ -132,7 +128,7 @@ class NabaztagManager(XplPlugin):
         print message
 
     def handle_xpl_cmd(self, message):
-        """ Process xpl schema sendmsg.basic
+        """ Process xpl schema sendmsg.basic and
         """
         self.log.debug("xpl-cmds listener received message:{0}".format(message))
         device_name = message.data['to']

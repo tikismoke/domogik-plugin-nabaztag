@@ -134,18 +134,6 @@ class NabaztagClientsManager:
                 client.updateDevice(a_device)
                 break
 
-    def NabaztagClientsConnection(self):
-        """ Send a Notification connection Nabaztag to all Clients."""
-        for id in self.clients:
-            message = {'to': self.clients[id]._operator.to}
-            message['header'] = self._xplPlugin.get_config("msg_header")
-            message['title'] = 'Connexion'
-            message['body'] = u"Your Terminal is registered to receive notification :)"
-            data = self.clients[id]._operator.send(message)
-            if data['error'] == '': del data['error']
-            data['to'] = self.clients[id].domogikDevice
-            self.sendXplAck(data)
-
     def sendXplAck(self, data):
         """Send an ack xpl message"""
         self._cb_send_xPL("sendmsg.confirm", data)

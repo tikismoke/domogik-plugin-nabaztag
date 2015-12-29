@@ -44,6 +44,28 @@
         }
       ],
       "xpl_command": "xPL_sleep"
+    },
+    "left_ear": {
+      "name": "Left ear position",
+      "return_confirmation": true,
+      "parameters": [
+        {
+          "key": "posleft",
+          "data_type": "DT_Number"
+        }
+      ],
+      "xpl_command": "xPL_left_ear"
+    },
+    "right_ear": {
+      "name": "Right ear position",
+      "return_confirmation": true,
+      "parameters": [
+        {
+          "key": "posright",
+          "data_type": "DT_Number"
+        }
+      ],
+      "xpl_command": "xPL_right_ear"
     }
   },
   "xpl_commands": {
@@ -67,6 +89,24 @@
     },
     "xPL_sleep": {
       "name": "Sleep via curl",
+      "schema": "sendmsg.basic",
+      "xplstat_name": "xPL_ack-msg",
+      "parameters": {
+        "static": [],
+        "device": []
+      }
+    },
+    "xPL_left_ear": {
+      "name": "Left Ear position",
+      "schema": "sendmsg.basic",
+      "xplstat_name": "xPL_ack-msg",
+      "parameters": {
+        "static": [],
+        "device": []
+      }
+    },
+    "xPL_right_ear": {
+      "name": "Right Ear position",
       "schema": "sendmsg.basic",
       "xplstat_name": "xPL_ack-msg",
       "parameters": {
@@ -135,7 +175,9 @@
       "commands": [
         "send_msg",
         "wakeup",
-        "sleep"
+        "sleep",
+        "left_ear",
+        "right_ear"
       ],
       "sensors": [
         "msg_status",
