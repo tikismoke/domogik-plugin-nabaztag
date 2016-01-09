@@ -29,13 +29,13 @@ def create_device():
     params["voice"] = VOICE
     params["mac"] = MAC
     for idx, val in enumerate(params['global']):
-        if params['global'][idx]['key'] == 'name' :  params['global'][idx]['value'] = OP_NAME
-        if params['global'][idx]['key'] == 'address' :  params['global'][idx]['value'] = OP_ADDRESS
-        if params['global'][idx]['key'] == 'violet_token' :  params['global'][idx]['value'] = OP_VIOLET_TOKEN
-        if params['global'][idx]['key'] == 'voice' :  params['global'][idx]['value'] = OP_VOCIE
-        if params['global'][idx]['key'] == 'mac' :  params['global'][idx]['value'] = OP_MAC
+        if params['global'][idx]['key'] == 'name' :  params['global'][idx]['value'] = DEVICE_NAME_NABAZTAG
+        if params['global'][idx]['key'] == 'address' :  params['global'][idx]['value'] = ADDRESS
+        if params['global'][idx]['key'] == 'violet_token' :  params['global'][idx]['value'] = VIOLET_TOKEN
+        if params['global'][idx]['key'] == 'voice' :  params['global'][idx]['value'] = VOICE
+        if params['global'][idx]['key'] == 'mac' :  params['global'][idx]['value'] = MAC
     for idx, val in enumerate(params['xpl']):
-        params['xpl'][idx]['value'] = to
+        params['xpl'][idx]['value'] = TO
 
     # go and create
     td.create_device(params)
