@@ -48,7 +48,7 @@ device_types : nabaztag
 +-------------------+-------------------+------------------------------------------------------------------------------+
 | Reference         | What you want     | A Reference for this device.                                                 |
 +-------------------+-------------------+------------------------------------------------------------------------------+
-| address           | openjabanab.fr    | Dddress of you openjabnab server                                             |
+| address           | openjabanab.fr    | Address of you openjabnab server                                             |
 +-------------------+-------------------+------------------------------------------------------------------------------+
 | voice             | voice=claire      | Nabaztag voice. Can be voice=xx or ws_kajedo=xxxx or ws_acapela=xxxx         |
 +-------------------+-------------------+------------------------------------------------------------------------------+
